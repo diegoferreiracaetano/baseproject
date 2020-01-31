@@ -6,7 +6,6 @@ import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
 import com.diegoferreiracaetano.domain.ResultRouter
-import com.diegoferreiracaetano.domain.card.Card
 import com.diegoferreiracaetano.domain.user.User
 import com.diegoferreiracaetano.router.Router
 import kotlinx.coroutines.flow.flow
@@ -22,15 +21,6 @@ internal object Mock {
     )
 
     fun users() = listOf(user())
-
-    fun card() = Card(
-        id = 1,
-        brand = "MASTERCARD",
-        number = 11111111111111,
-        name = "DIEGO CAETANO",
-        date = "11/11",
-        cvv = 111
-    )
 }
 
 internal fun <T> T.toResultSuccessTest(router: Router) = flow {

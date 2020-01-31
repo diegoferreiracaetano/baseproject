@@ -9,12 +9,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diegoferreiracaetano.Mock
-import com.diegoferreiracaetano.router.card.CardRouter
+import com.diegoferreiracaetano.router.user.UserRouter
 import com.diegoferreiracaetano.toLiveDataResultTest
 import com.diegoferreiracaetano.users.R
 import io.mockk.coEvery
 import io.mockk.mockk
-import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,8 +38,7 @@ class UsersFragmentTest : AutoCloseKoinTest() {
 
     @Test
     fun givenStartScreen_shouldTextNameUser() {
-        coEvery { viewModel.users() } returns Mock.users().toLiveDataResultTest(CardRouter())
-        coEvery { viewModel.job() } returns true.toLiveDataResultTest()
+        coEvery { viewModel.users() } returns Mock.users().toLiveDataResultTest(UserRouter())
 
         launchFragmentInContainer<UsersFragment>(
             fragmentArgs = Bundle.EMPTY,
@@ -53,8 +51,7 @@ class UsersFragmentTest : AutoCloseKoinTest() {
 
     @Test
     fun givenStartScreen_shouldTextNickName() {
-        coEvery { viewModel.users() } returns Mock.users().toLiveDataResultTest(CardRouter())
-        coEvery { viewModel.job() } returns true.toLiveDataResultTest()
+        coEvery { viewModel.users() } returns Mock.users().toLiveDataResultTest(UserRouter())
 
         launchFragmentInContainer<UsersFragment>(
             fragmentArgs = Bundle.EMPTY,

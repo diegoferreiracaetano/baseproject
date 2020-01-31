@@ -4,11 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.diegoferreiracaetano.Mock
 import com.diegoferreiracaetano.domain.ResultRouter
-import com.diegoferreiracaetano.domain.receipt.ReceiptInteractor
-import com.diegoferreiracaetano.domain.user.SyncUserInteractor
 import com.diegoferreiracaetano.domain.user.User
 import com.diegoferreiracaetano.domain.user.UserInteractor
-import com.diegoferreiracaetano.router.card.CardRouter
+import com.diegoferreiracaetano.router.user.UserRouter
 import com.diegoferreiracaetano.toResultSuccessTest
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,8 +30,6 @@ internal class UsersViewModelTest {
     val rule = InstantTaskExecutorRule()
 
     private val userInteractor = mockk<UserInteractor>()
-    private val receiptInteractor = mockk<ReceiptInteractor>()
-    private val syncUserInteractor = mockk<SyncUserInteractor>()
 
     private lateinit var viewModel: UsersViewModel
 
@@ -42,7 +38,7 @@ internal class UsersViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = UsersViewModel(userInteractor, receiptInteractor, syncUserInteractor)
+        viewModel = UsersViewModel(userInteractor)
     }
 
     @After
@@ -55,27 +51,14 @@ internal class UsersViewModelTest {
     fun `Given interactor users When call users Then verify result success`() {
 
         val observer = mockk<Observer<Result<ResultRouter<List<User>>>>>()
-        val result = Mock.users().toResultSuccessTest(CardRouter())
+        val result = Mock.users().toResultSuccessTest(UserRouter())
 
-        coEvery { userInteractor.invoke("") } returns result
+        coEvery { userInteractor.invoke(Unit) } returns result
         viewModel.users().observeForever(observer)
 
         coVerify { observer.onChanged(result.single()) }
     }
 
-    @Test
-    fun `Given interactor users When call search Then verify search`() {
-
-        val observer = mockk<Observer<Result<ResultRouter<List<User>>>>>()
-        val result = Mock.users().toResultSuccessTest(CardRouter())
-
-        coEvery { userInteractor.invoke("string") } returns result
-
-        viewModel.search("string")
-        viewModel.users().observeForever(observer)
-
-        coVerify { observer.onChanged(result.single()) }
-    }
 
     @Test(expected = Throwable::class)
     fun `Given interactor users When call users Then verify result error`() {

@@ -1,8 +1,10 @@
 package com.diegoferreiracaetano.data.remote.user
 
-import com.diegoferreiracaetano.data.remote.PicpayApi
+import com.diegoferreiracaetano.data.remote.RemoteApi
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -10,12 +12,12 @@ import org.junit.Test
 
 internal class UserRepositoryRemoteTest {
 
-    private val service = mockk<PicpayApi>()
-    private lateinit var repositoryRemote: OrderRepositoryRemote
+    private val service = mockk<RemoteApi>()
+    private lateinit var repositoryRemote: UserRepositoryRemote
 
     @Before
     fun setup() {
-        repositoryRemote = OrderRepositoryRemote(service)
+        repositoryRemote = UserRepositoryRemote(service)
     }
 
     @Test
@@ -27,7 +29,7 @@ internal class UserRepositoryRemoteTest {
 
             val result = repositoryRemote.users()
 
-            assertEquals(result, service.users().transform())
+            assertEquals(result, service.users().single().transform())
         }
     }
 }

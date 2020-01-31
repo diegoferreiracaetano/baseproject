@@ -1,27 +1,17 @@
 package com.diegoferreiracaetano.data.di
 
-import androidx.room.Room
 import com.diegoferreiracaetano.data.BuildConfig
-import com.diegoferreiracaetano.data.local.AppDatabase
-import com.diegoferreiracaetano.data.local.card.CardRepositoryLocal
-import com.diegoferreiracaetano.data.local.transaction.TransactionRepositoryLocal
-import com.diegoferreiracaetano.data.local.user.UserRepositoryLocal
-import com.diegoferreiracaetano.data.remote.PicpayApi
-import com.diegoferreiracaetano.data.remote.payment.PaymentRepositoryRemote
+import com.diegoferreiracaetano.data.remote.RemoteApi
 import com.diegoferreiracaetano.data.remote.user.UserRepositoryRemote
-import com.diegoferreiracaetano.domain.card.CardRepository
-import com.diegoferreiracaetano.domain.payment.PaymentRepository
-import com.diegoferreiracaetano.domain.transaction.TransactionRepository
 import com.diegoferreiracaetano.domain.user.UserRepository
-import java.util.concurrent.TimeUnit
 import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.Module
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 private const val REQUEST_TIMEOUT: Long = 60
 
@@ -64,28 +54,7 @@ val dataModule: Module = module {
             .build()
     }
 
-    single {
-        Room.databaseBuilder(get(), AppDatabase::class.java, "database-name")
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
-    }
-
-    single { get<AppDatabase>().cardDao() }
-
-    single { get<AppDatabase>().transactionDao() }
-
-    single { get<AppDatabase>().userDao() }
-
-    single { get<Retrofit>().create(PicpayApi::class.java) }
+    single { get<Retrofit>().create(RemoteApi::class.java) }
 
     single<UserRepository> { UserRepositoryRemote(get()) }
-
-    single<UserRepository>(named("local")) { UserRepositoryLocal(get()) }
-
-    single<PaymentRepository> { PaymentRepositoryRemote(get()) }
-
-    single<CardRepository> { CardRepositoryLocal(get()) }
-
-    single<TransactionRepository> { TransactionRepositoryLocal(get()) }
 }

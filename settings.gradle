@@ -1,9 +1,8 @@
-include ':app', ':style', ':router', ':work',
+include ':app',
+        ':style',
+        ':router',
         ':buildSrc',
         ':commons',
         ':domain',
         ':data',
-        ':features:payment',
-        ':features:receipt',
-        ':features:card',
         ':features:users'
